@@ -5,7 +5,6 @@
  *
  * Tutorial page: https://arduinogetstarted.com/tutorials/arduino-rfid-nfc-door-lock-system
  */
-https://dientuviet.com/giao-tiep-ban-phim-4x4-voi-arduino/
 #include <SPI.h>
 #include <MFRC522.h>
 
