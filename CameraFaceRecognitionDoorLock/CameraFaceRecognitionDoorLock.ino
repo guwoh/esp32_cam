@@ -15,8 +15,7 @@
 //#define CAMERA_MODEL_M5STACK_WIDE
 #define CAMERA_MODEL_AI_THINKER
 #define Relay 2
-#define Red 13
-#define Green 12
+
 #include "camera_pins.h"
 
 // const char* ssid = ""; //Wifi Name SSID
@@ -33,11 +32,7 @@ int interval = 5000;
 
 void setup() {
   pinMode(Relay,OUTPUT);
-  pinMode(Red,OUTPUT);
-  pinMode(Green,OUTPUT);
   digitalWrite(Relay,LOW);
-  digitalWrite(Red,HIGH);
-  digitalWrite(Green,LOW);
   
   Serial.begin(115200);
   Serial.setDebugOutput(true);
@@ -123,8 +118,6 @@ void loop() {
   {
     activateRelay=true;
     digitalWrite(Relay,HIGH);
-    digitalWrite(Green,HIGH);
-    digitalWrite(Red,LOW);
     prevMillis=millis();
     }
     if (activateRelay == true && millis()-prevMillis > interval)
@@ -132,7 +125,5 @@ void loop() {
       activateRelay=false;
       matchFace=false;
       digitalWrite(Relay,LOW);
-      digitalWrite(Green,LOW);
-      digitalWrite(Red,HIGH);
       }
 }
