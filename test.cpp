@@ -2,10 +2,6 @@
 #include <Servo.h>
 #include <SPI.h>
 #include <MFRC522.h>
-#include <Wire.h>
-#include <LiquidCrystal_I2C.h>
-
-LiquidCrystal_I2C lcd(0x27, 16, 2); // I2C address 0x27, 16 column and 2 rows
 
 Servo myservo;  // create servo object to control a servo
 
@@ -38,21 +34,11 @@ void setup()
     rfid.PCD_Init(); // init MFRC522
 
     Serial.println("Tap RFID/NFC Tag on reader");
-
-    // Initialize the LCD
-    lcd.init();
-    lcd.backlight();
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("  NGHICH DTVT");
-
-    // Initialize LCD with initial state
-    updateLCD("Door is locked");
 }
 
 void loop()
 {
-    // Check button state
+    // switch code
     button.tick(); // Check button state
     delay(10);     // Small delay to debounce
 
@@ -70,7 +56,6 @@ void loop()
                 rfidUnlock = true;
                 rfidUnlockTime = millis();
                 myservo.write(180); // unlock the door
-                updateLCD("Door is unlocked");
             }
             else
             {
@@ -88,48 +73,40 @@ void loop()
         }
     }
 
-    // Check if ESP32-CAM signals to unlock the door
-    int esp = digitalRead(3);
-    if (esp == HIGH)
+    // Check if we need to lock the door after 3 seconds
+    
+
+    // for esp32_cam
+    int esp=digitalRead(3);
+    if (esp==1)
     {
-        Serial.println("Unlock door");
-        espData = true;
-        espUnLockTime = millis();
-        myservo.write(180); // unlock the door
-        updateLCD("Door is unlocked");
+      Serial.println("Unlock door");
+      espData = true;
+      espUnLockTime = millis();
+      myservo.write(180); // unlock the door
     }
 
-    // Check if we need to lock the door after 3 seconds
     if ((rfidUnlock && (millis() - rfidUnlockTime > 3000)) || (espData && (millis() - espUnLockTime > 3000)))
     {
-        myservo.write(0); // lock the door
-        rfidUnlock = false;
-        espData = false;
-        updateLCD("Door is locked");
+      myservo.write(0); // lock the door
+      rfidUnlock = false;
+      espData = false ;
     }
+
 }
 
-// Function to update LCD with a given message
-void updateLCD(const char *message)
-{
-    lcd.setCursor(0, 1);
-    lcd.print(message);
-    lcd.print("          "); // Clear any remaining characters on the line
-}
 
-// Function called on button click to toggle door state
+//switch code
 void handleClick()
 {
     if (isOpen)
     {
         myservo.write(0);   // Close the servo
         isOpen = false;     // Update the state
-        updateLCD("Door is locked");
     }
     else
     {
         myservo.write(180); // Open the servo
         isOpen = true;      // Update the state
-        updateLCD("Door is unlocked");
     }
 }
