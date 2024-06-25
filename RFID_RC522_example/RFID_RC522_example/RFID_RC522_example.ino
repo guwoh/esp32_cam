@@ -20,8 +20,6 @@ void setup() {
   Serial.begin(9600);
   SPI.begin(); // init SPI bus
   rfid.PCD_Init(); // init MFRC522
-  pinMode(RELAY_PIN, OUTPUT); // initialize pin as an output.
-  digitalWrite(RELAY_PIN, HIGH); // lock the door
 
   Serial.println("Tap RFID/NFC Tag on reader");
 }

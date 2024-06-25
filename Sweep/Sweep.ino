@@ -24,7 +24,7 @@ void loop() {
   else
   {
     myservo.write(0);
-  }
+  } 
   
   
   
