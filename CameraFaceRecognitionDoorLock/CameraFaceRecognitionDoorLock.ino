@@ -28,7 +28,7 @@ void startCameraServer();
 boolean matchFace = false;
 boolean activateRelay = false;
 long prevMillis=0;
-int interval = 5000;
+int interval = 2000;
 
 void setup() {
   pinMode(Relay,OUTPUT);
